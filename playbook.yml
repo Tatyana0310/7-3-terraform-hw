@@ -16,3 +16,26 @@
         state: started
         enabled: yes
 
+- hosts: databases
+  become: yes
+  tasks:   
+
+   - name: Install MySQL
+     apt:
+       name: mysql-server
+       state: present
+       update_cache: yes
+       
+   - name: MySQL service
+     systemd:
+       name: mysql
+       state: started
+       enabled: yes
+   
+   - name: Get status
+     command: systemctl status mysql
+     register: mysql_status
+
+   - name: MySQL status
+     debug:
+      var: mysql_status
